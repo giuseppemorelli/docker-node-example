@@ -1,0 +1,40 @@
+version: '3'
+
+################################################################################
+# SERVICES
+################################################################################
+services:
+
+  # ------------------------------------------------------------
+  # MySQL Database
+  # ------------------------------------------------------------
+  mysql:
+    container_name: myproject_mysql
+    image: mysql:5.7
+
+    environment:
+      MYSQL_ROOT_PASSWORD: "docker"
+      MYSQL_USER: "local"
+      MYSQL_PASSWORD: "local"
+
+    volumes:
+      # ---- Format: ----
+      # HOST-DIRECTORY : DOCKER-DIRECTORY
+      - ${MYSQL_BACKUP_FOLDER}:/backup/
+
+    networks:
+      app_net:
+        ipv4_address: ${IP_MYSQL_SERVER}
+
+################################################################################
+# NETWORK
+################################################################################
+networks:
+  app_net:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+    ipam:
+      driver: default
+      config:
+        -   subnet: ${IP_SUBNET}
