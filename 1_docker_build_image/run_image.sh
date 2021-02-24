@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-docker run demo-docker/npmdemo npm
+docker run --rm demo-docker/npmdemo npm
