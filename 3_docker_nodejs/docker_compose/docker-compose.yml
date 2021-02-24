@@ -1,0 +1,48 @@
+version: '3'
+
+################################################################################
+# SERVICES
+################################################################################
+services:
+
+    # ------------------------------------------------------------
+    # Node.js Server
+    # ------------------------------------------------------------
+    nodejs:
+        container_name: ${COMPOSE_PROJECT_NAME}_${NODEJS_SERVER_NAME}
+        image: ${NODEJS_SERVER}
+        user: ${NODEJS_USER}
+        command: ${NODEJS_COMMAND}
+
+        ports:
+            - "4040:4040"
+
+        environment:
+            NODE_ENV: ${NODEJS_ENV}
+
+        volumes:
+            # ---- Format: ----
+            # HOST-DIRECTORY : DOCKER-DIRECTORY
+
+            # mount project folder
+            - ${PWD}:/home/node/project
+
+        working_dir: /home/node/project
+
+        networks:
+            app_net:
+                ipv4_address: ${IP_NODE_SERVER}
+
+
+################################################################################
+# NETWORK
+################################################################################
+networks:
+    app_net:
+        driver: bridge
+        driver_opts:
+            com.docker.network.enable_ipv6: "false"
+        ipam:
+            driver: default
+            config:
+                -   subnet: ${IP_SUBNET}
